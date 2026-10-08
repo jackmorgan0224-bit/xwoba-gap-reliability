@@ -1,0 +1,6 @@
+forecast,rmse_points,vs_xwoba_points,lo,hi,share_of_boot_better
+wOBA,33.3692,1.7510,1.0438,2.4622,0.0000
+xwOBA,31.6181,0.0000,0.0000,0.0000,0.0000
+xwOBA + shrunk gap,31.6296,0.0115,-0.0393,0.0629,0.3430
+xwOBA + shrunk gap + traits,31.6315,0.0134,-0.2164,0.2358,0.4400
+"xwOBA + shrunk gap + traits, next park known",31.5541,-0.0640,-0.2983,0.1620,0.7070

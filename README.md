@@ -6,21 +6,26 @@ repeatable skill that xwOBA doesn't see. This project measures **how much of the
 believe, given how many batted balls we've seen and what kind of hitter he is**, and turns
 that into a discount a front office can apply when evaluating trade and free-agent targets.
 
-> **Status: in progress (Oct 2026).** Steps 0–3 are done; steps 4–5 are a plan. Nothing is a
-> finding until it's marked done in the plan below.
+> **Status: complete (Oct 2026).** All five steps are done. The front-office memo applying
+> them to 2026 hitters and the Mets roster: [`docs/memo.md`](docs/memo.md).
 
-## Findings so far
+## Findings
 
-1. **Even a full season's gap is mostly noise.** The gap is half signal only after about
+1. **To project next season, use xwOBA and ignore the gap.** Adding a hitter's
+   wOBA–xwOBA gap to his xwOBA doesn't improve next-season wOBA forecasts (+0.01 points of
+   error, 95% CI −0.04 to +0.06). The gap partly repeats, but hitters who beat their xwOBA
+   also see their xwOBA fall the next year by about as much. Rule: next wOBA ≈ league +
+   0.56 × (xwOBA − league). [Step 4](docs/step4.md)
+2. **Even a full season's gap is mostly noise.** The gap is half signal only after about
    1,000 balls in play (95% CI 780–1,370), roughly two and a half seasons. For one full
    season, believe about 25% of it when projecting next year. Trusting the whole gap
    forecasts worse than assuming it's pure luck. [Step 2](docs/step2.md)
-2. **The part that repeats is mostly pulled power.** xwOBA ignores direction: a pulled fly
+3. **The part that repeats is mostly pulled power.** xwOBA ignores direction: a pulled fly
    ball at 100–105 mph beats its expected wOBA by 502 points on average, while the same ball
    to center or the opposite field falls 270 short. Parks (Coors +33 per ball in play, Citi
    Field −8) and speed add smaller pieces. But once the gap is discounted, adding these traits
    doesn't measurably improve next-season forecasts. [Step 3](docs/step3.md)
-3. **The gap repeats less than the published research says.** Among hitters with 300+ PA
+4. **The gap repeats less than the published research says.** Among hitters with 300+ PA
    in back-to-back seasons, the year-over-year correlation of the wOBA–xwOBA gap was
    **.38 in 2015–19 and .25 in 2021–26** (difference −.13, 95% CI −.23 to −.02). The
    method reproduces the published estimate on its original seasons (Melchior's sample
@@ -74,8 +79,8 @@ What this project adds:
 | 1 | How strongly does the gap persist year over year in 2021–2026, and does it match the published r ≈ .43? | ✅ [Done](docs/step1.md) |
 | 2 | How does gap reliability change with sample size? (within-season split-half, shrinkage table) | ✅ [Done](docs/step2.md) |
 | 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | ✅ [Done](docs/step3.md) |
-| 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | ⬜ |
-| 5 | Front-office memo: 2026 trade/free-agent targets whose results misstate their underlying quality | ⬜ |
+| 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | ✅ [Done](docs/step4.md) |
+| 5 | Front-office memo: 2026 trade/free-agent targets whose results misstate their underlying quality | ✅ [Memo](docs/memo.md) |
 
 ## Data
 
@@ -122,6 +127,8 @@ python src/fetch_statcast.py      # every 2021-26 plate appearance (~35 min, ~24
 python src/step2_reliability.py   # step 2 (~20 min, mostly bootstrap) -> results/step2_*.csv
 python src/step3_traits.py        # step 3 -> results/step3_*.csv
 python src/step23_figures.py      # step 2-3 charts
+python src/step4_projection.py    # step 4 -> results/step4_*.csv
+python src/step5_board.py         # step 5: 2027 projections -> results/step5_board.csv
 ```
 
 ## Repository layout
