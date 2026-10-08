@@ -1,0 +1,11 @@
+direction,exit_velocity,balls,mean_resid_points
+not pulled,under 90,57716,8.9637
+not pulled,90-95,29351,-56.4012
+not pulled,95-100,28525,-212.1596
+not pulled,100-105,18401,-269.9982
+not pulled,105+,6725,-123.1056
+pulled,under 90,14460,-6.8173
+pulled,90-95,7735,122.7083
+pulled,95-100,10382,408.4725
+pulled,100-105,11926,501.7998
+pulled,105+,9398,207.2293

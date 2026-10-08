@@ -1,0 +1,14 @@
+check,value
+"duplicate plate appearances (game_pk, at_bat_number)",0
+"player-seasons (leaderboard, 100+ PA)",2774
+missing from PA-level data,0
+PA differs,0
+balls in play missing Statcast xwOBA,2640 of 740633
+wOBA within .0005 (leaderboard rounding),97.3%
+wOBA max difference,0.00067
+xwOBA within .0005,50.5%
+xwOBA within .002,87.2%
+xwOBA max difference,0.01378
+"gap: correlation, rebuilt vs leaderboard",0.9981
+gap: RMS difference (wOBA points x1000),1.44
+gap: leaderboard SD across player-seasons (x1000),23.01

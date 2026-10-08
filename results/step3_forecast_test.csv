@@ -1,0 +1,6 @@
+forecast,rmse_points,vs_shrunk_gap_points,lo,hi
+no trust,19.4766,0.3749,0.1029,0.6486
+shrunk gap,19.1016,0.0000,0.0000,0.0000
+traits,19.2653,0.1636,-0.1026,0.4506
+shrunk gap + traits,19.0482,-0.0534,-0.2189,0.1089
+"shrunk gap + traits, next park known",18.9458,-0.1558,-0.3769,0.0595

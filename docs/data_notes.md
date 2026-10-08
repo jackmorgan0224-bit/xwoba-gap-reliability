@@ -34,7 +34,34 @@ set to missing before 2024 so bat-speed analyses use full seasons only.
 when either value is missing, so the first version of several checks silently passed
 rows with missing data. Every check now counts a missing value as flagged.
 
+**Statcast Search's per-pitch wOBA values are rounded.** `woba_value` uses generic weights
+(single 0.9, double 1.25, home run 2.0, walk 0.7) and counts reaching on an error as a
+single, while the leaderboards use each season's exact weights and treat errors as outs.
+Step 2 recovers each season's weights from the leaderboard by least squares and revalues
+every plate appearance; rebuilt wOBA then matches the leaderboard to rounding for 97% of
+player-seasons (max difference .0007).
+
+**Statcast labels the Athletics "ATH" in every season**, while the MLB Stats API uses "OAK"
+through 2024. Without a mapping, the 2021–24 Athletics would have dropped out of the park
+join.
+
+**Overlapping download windows.** A one-week test download (June 1–7, 2025) overlapped two
+of the regular weekly files and would have double-counted those games. It was found by a
+file count and deleted, and step 2 now refuses to run if any plate appearance
+(game, at-bat number) appears twice.
+
+**Look-ahead in park effects.** Step 3's first forecast test used park effects estimated
+from all other seasons, including the season being forecast. Forecast inputs now use only
+seasons up to the forecast season.
+
 ## Known and accepted
+
+- **Statcast Search's per-ball expected wOBA doesn't exactly reproduce the leaderboard
+  xwOBA** (87% of player-seasons within .002, max .014). The rebuilt gap still correlates
+  .998 with the leaderboard gap. The cause wasn't found in 2021 data (not sprint speed,
+  errors, sacrifice flies, or other event types tested).
+- **0.4% of balls in play have no Statcast expected wOBA** (2,640 of 740,633); they're
+  excluded from steps 2–3.
 
 - **PA differs by 1–2 between Savant and the MLB Stats API** (31 player-seasons). Both
   sources were confirmed against the live endpoints; this is a small difference in how

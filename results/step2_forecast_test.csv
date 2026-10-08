@@ -1,0 +1,5 @@
+forecast,rmse_points,vs_no_trust_points,vs_no_trust_lo,vs_no_trust_hi
+no trust,19.504,0.000,0.000,0.000
+full trust,26.232,6.728,5.635,7.804
+split-half shrink,19.125,-0.379,-0.685,-0.090
+carryover shrink,19.115,-0.389,-0.663,-0.130

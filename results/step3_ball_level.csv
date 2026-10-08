@@ -1,0 +1,10 @@
+batted_ball,direction,balls,mean_resid_points
+fly_ball,center,68557,-179.9257
+fly_ball,opposite,72161,-9.0200
+fly_ball,pulled,53901,241.6159
+ground ball,center,76128,18.7019
+ground ball,opposite,51121,101.5389
+ground ball,pulled,186986,-40.3467
+line_drive,center,58892,-68.3552
+line_drive,opposite,47501,24.6781
+line_drive,pulled,70053,38.7976

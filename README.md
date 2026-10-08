@@ -6,23 +6,31 @@ repeatable skill that xwOBA doesn't see. This project measures **how much of the
 believe, given how many batted balls we've seen and what kind of hitter he is**, and turns
 that into a discount a front office can apply when evaluating trade and free-agent targets.
 
-> **Status: in progress (Oct 2026).** Steps 0–1 are done; steps 2–5 are a plan. Nothing is a
+> **Status: in progress (Oct 2026).** Steps 0–3 are done; steps 4–5 are a plan. Nothing is a
 > finding until it's marked done in the plan below.
 
 ## Findings so far
 
-**The gap repeats less than the published research says.** Among hitters with 300+ PA in
-back-to-back seasons, the year-over-year correlation of the wOBA–xwOBA gap was **.38 in
-2015–19 and .25 in 2021–26** (difference −.13, 95% CI −.23 to −.02). About a quarter of a
-full-season gap now carries into the next season. The method reproduces the published
-estimate exactly on its original seasons (r = .42 on the same 322 hitter-pairs as
-Melchior's .43), the shift ban isn't the cause, and a fading link between the gap and
-sprint speed explains about a quarter of the drop. Full write-up:
-[`docs/step1.md`](docs/step1.md).
+1. **Even a full season's gap is mostly noise.** The gap is half signal only after about
+   1,000 balls in play (95% CI 780–1,370), roughly two and a half seasons. For one full
+   season, believe about 25% of it when projecting next year. Trusting the whole gap
+   forecasts worse than assuming it's pure luck. [Step 2](docs/step2.md)
+2. **The part that repeats is mostly pulled power.** xwOBA ignores direction: a pulled fly
+   ball at 100–105 mph beats its expected wOBA by 502 points on average, while the same ball
+   to center or the opposite field falls 270 short. Parks (Coors +33 per ball in play, Citi
+   Field −8) and speed add smaller pieces. But once the gap is discounted, adding these traits
+   doesn't measurably improve next-season forecasts. [Step 3](docs/step3.md)
+3. **The gap repeats less than the published research says.** Among hitters with 300+ PA
+   in back-to-back seasons, the year-over-year correlation of the wOBA–xwOBA gap was
+   **.38 in 2015–19 and .25 in 2021–26** (difference −.13, 95% CI −.23 to −.02). The
+   method reproduces the published estimate on its original seasons (Melchior's sample
+   rule yields 322 pairs, the same count he reported, and r = .42 vs. his .43), the shift ban isn't the cause,
+   and a fading link between the gap and sprint speed explains about a quarter of the
+   drop. [Step 1](docs/step1.md)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/step1_persistence_dark.png">
-  <img alt="Line chart: year-over-year correlation of the wOBA-xwOBA gap by minimum PA. 2015-19 runs from .32 at 100+ PA to .44 at 500+; 2021-26 runs from .17 to .29, ending at .25 at 500+." src="docs/figures/step1_persistence_light.png" width="720">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/step2_trust_dark.png">
+  <img alt="Share of the gap to believe rises from about 3% at 25 balls in play to 28% at 400 and 37% at 600 for the current season, and slightly lower for next season." src="docs/figures/step2_trust_light.png" width="720">
 </picture>
 
 ## Why this question
@@ -64,8 +72,8 @@ What this project adds:
 |---|---|---|
 | 0 | Build a reproducible, validated player-season dataset (2021–2026) | ✅ Done |
 | 1 | How strongly does the gap persist year over year in 2021–2026, and does it match the published r ≈ .43? | ✅ [Done](docs/step1.md) |
-| 2 | How does gap reliability change with sample size? (within-season split-half, shrinkage table) | ⬜ |
-| 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | ⬜ |
+| 2 | How does gap reliability change with sample size? (within-season split-half, shrinkage table) | ✅ [Done](docs/step2.md) |
+| 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | ✅ [Done](docs/step3.md) |
 | 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | ⬜ |
 | 5 | Front-office memo: 2026 trade/free-agent targets whose results misstate their underlying quality | ⬜ |
 
@@ -82,6 +90,7 @@ non-commercial use, so the repo ships the code to rebuild it rather than the dat
 | Savant expected-stats leaderboard | PA, wOBA, xwOBA | Independent endpoint, used only to cross-check |
 | [MLB Stats API](https://statsapi.mlb.com) | PA by team, team and venue IDs, batting hand | Joined on MLBAM player ID |
 | Savant, 2015–2019 | PA, AB, pitches, wOBA, xwOBA, sprint speed | Era comparison and replication of published estimates (step 1) |
+| Savant Statcast Search | Every 2021–2026 plate appearance: result, batted-ball type, exit velocity, launch angle, hit coordinates, expected wOBA | Steps 2–3; reconciled to the leaderboards (0 PA mismatches across 2,774 player-seasons) |
 
 **Dataset:** 2,774 player-seasons and 1,780 consecutive-season pairs (2021–2026), plus
 2,216 player-seasons and 1,365 pairs (2015–2019). Column definitions:
@@ -109,6 +118,10 @@ python src/build_db.py     # build data/statcast.duckdb, run checks (exits non-z
 pytest                     # same checks as a test suite
 python src/step1_persistence.py   # step 1 analysis -> results/step1_*.csv
 python src/step1_figures.py       # step 1 charts -> docs/figures/
+python src/fetch_statcast.py      # every 2021-26 plate appearance (~35 min, ~24 MB)
+python src/step2_reliability.py   # step 2 (~20 min, mostly bootstrap) -> results/step2_*.csv
+python src/step3_traits.py        # step 3 -> results/step3_*.csv
+python src/step23_figures.py      # step 2-3 charts
 ```
 
 ## Repository layout
@@ -116,10 +129,13 @@ python src/step1_figures.py       # step 1 charts -> docs/figures/
 ```
 src/fetch_data.py         download Savant + MLB Stats API data to data/raw/
 src/build_db.py           build the DuckDB database, run checks, write the report
-src/step1_*.py            step 1 analysis and figures
+src/fetch_statcast.py     plate-appearance-level Statcast download
+src/step*_*.py            analysis and figures for each step
 sql/01_build_tables.sql   staging tables, player_season, season_pairs, 2015-19 history
 sql/02_validation.sql     data-quality checks
 sql/03_step1_pairs.sql    step 1 analysis table (centered and speed-adjusted gaps)
+sql/04*_statcast_*.sql    plate-appearance tables valued with each season's exact weights
+sql/05_step3_traits.sql   spray angle, park effects, forecast-safe park exposure
 tests/                    pytest wrapper around the validation checks
 results/                  step outputs (CSV)
 docs/                     step write-ups, figures, data dictionary, validation report, data notes
