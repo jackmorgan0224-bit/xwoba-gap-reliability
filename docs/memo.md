@@ -14,6 +14,8 @@
 3. **On our roster, Marcus Semien's 2026 understates him most:** .276 wOBA, .300 xwOBA,
    projects to .312. Bo Bichette and Brett Baty also project about 20 points above their 2026
    wOBA.
+4. **No pending free agent is underpriced, so look to trades.** Jarren Duran, Cam Smith,
+   Dylan Crews, and Nico Hoerner each project 28–39 points above their 2026 wOBA.
 
 ## Pending free agents
 
@@ -56,6 +58,34 @@ and Arraez will be marketed on 2026 numbers that their contact quality doesn't s
   outside the board. His xwOBA was .321 in both 2025 (431 PA) and 2026, which projects to
   about .324, near league average. That's offense only; defense and baserunning are outside
   this model.
+
+## Buy-low trade targets
+
+None of the pending free agents above hit below their projection, so the board points to
+trade targets instead: hitters on other teams whose 2026 line sits 25+ points below what
+their contact quality supports. Contract status for these hitters was not checked.
+
+| Hitter | 2026 team | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
+|---|---|---:|---:|---:|---:|---:|
+| J.T. Realmuto | PHI | 467 | .275 | .317 | .322 | −47 |
+| Jarren Duran | BOS | 608 | .274 | .301 | .313 | −39 |
+| Salvador Perez | KC | 627 | .285 | .316 | .321 | −36 |
+| Matt McLain | CIN | 496 | .272 | .293 | .308 | −36 |
+| Cam Smith | HOU | 568 | .293 | .316 | .321 | −28 |
+| Dylan Crews | WSH | 443 | .294 | .317 | .322 | −28 |
+| Nico Hoerner | CHC | 689 | .297 | .322 | .325 | −28 |
+| José Ramírez | CLE | 544 | .301 | .325 | .326 | −25 |
+
+- **These are league-average bats priced like below-average ones.** Every projection falls
+  between .308 and .326. The case is paying less than the 2026 line implies, not finding a
+  star.
+- **Discount the two catchers.** Realmuto and Perez are in their mid-30s and the projection
+  has no age adjustment, so their numbers are likely optimistic.
+- **Duran, Smith, Crews, and Hoerner are the cleaner cases:** younger or in their primes,
+  with a down 2026 that their contact quality doesn't support.
+- Five more hitters were also understated by 25+ points (Nasim Nuñez, Zach McKinstry,
+  Ezequiel Tovar, Masyn Winn, Evan Carter) but project below .312, so a cheaper price
+  still buys a below-average bat.
 
 ## Before acting
 
