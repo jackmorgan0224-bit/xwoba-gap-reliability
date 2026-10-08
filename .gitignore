@@ -1,0 +1,10 @@
+# Built from data/raw by src/build_db.py
+data/*.duckdb
+data/*.duckdb.wal
+
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+
+# MLB Advanced Media data: personal, non-commercial use only. Rebuild with src/fetch_data.py.
+data/raw/
