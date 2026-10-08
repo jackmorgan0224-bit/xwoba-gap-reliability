@@ -14,8 +14,11 @@
 3. **On our roster, Marcus Semien's 2026 understates him most:** .276 wOBA, .300 xwOBA,
    projects to .312. Bo Bichette and Brett Baty also project about 20 points above their 2026
    wOBA.
-4. **No pending free agent is underpriced, so look to trades.** Jarren Duran, Cam Smith,
-   Dylan Crews, and Nico Hoerner each project 28–39 points above their 2026 wOBA.
+4. **None of the six pending free agents checked hit below their projection, so the
+   buy-low names are trade targets.** Jarren Duran, Cam Smith, Dylan Crews, and Nico Hoerner
+   each project 28–39 points above their 2026 wOBA. The six come from a list of the biggest
+   names, which leans toward hitters coming off strong (often lucky) years; a full
+   free-agent class would likely include some understated hitters.
 
 ## Pending free agents
 
@@ -61,8 +64,8 @@ and Arraez will be marketed on 2026 numbers that their contact quality doesn't s
 
 ## Buy-low trade targets
 
-None of the pending free agents above hit below their projection, so the board points to
-trade targets instead: hitters on other teams whose 2026 line sits 25+ points below what
+None of the six pending free agents above hit below their projection, so the board points
+to trade targets instead: hitters on other teams whose 2026 line sits 25+ points below what
 their contact quality supports. Contract status for these hitters was not checked.
 
 | Hitter | 2026 team | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
