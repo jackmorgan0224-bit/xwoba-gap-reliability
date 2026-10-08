@@ -6,9 +6,24 @@ repeatable skill that xwOBA doesn't see. This project measures **how much of the
 believe, given how many batted balls we've seen and what kind of hitter he is**, and turns
 that into a discount a front office can apply when evaluating trade and free-agent targets.
 
-> **Status: in progress (Oct 2026).** The data pipeline and validation layer are built.
-> Analysis steps below are a plan and will be filled in with results as they're completed.
-> Nothing below is a finding until it's marked done.
+> **Status: in progress (Oct 2026).** Steps 0–1 are done; steps 2–5 are a plan. Nothing is a
+> finding until it's marked done in the plan below.
+
+## Findings so far
+
+**The gap repeats less than the published research says.** Among hitters with 300+ PA in
+back-to-back seasons, the year-over-year correlation of the wOBA–xwOBA gap was **.38 in
+2015–19 and .25 in 2021–26** (difference −.13, 95% CI −.23 to −.02). About a quarter of a
+full-season gap now carries into the next season. The method reproduces the published
+estimate exactly on its original seasons (r = .42 on the same 322 hitter-pairs as
+Melchior's .43), the shift ban isn't the cause, and a fading link between the gap and
+sprint speed explains about a quarter of the drop. Full write-up:
+[`docs/step1.md`](docs/step1.md).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/step1_persistence_dark.png">
+  <img alt="Line chart: year-over-year correlation of the wOBA-xwOBA gap by minimum PA. 2015-19 runs from .32 at 100+ PA to .44 at 500+; 2021-26 runs from .17 to .29, ending at .25 at 500+." src="docs/figures/step1_persistence_light.png" width="720">
+</picture>
 
 ## Why this question
 
@@ -48,7 +63,7 @@ What this project adds:
 | Step | Question | Status |
 |---|---|---|
 | 0 | Build a reproducible, validated player-season dataset (2021–2026) | ✅ Done |
-| 1 | How strongly does the gap persist year over year in 2021–2026, and does it match the published r ≈ .43? | ⬜ |
+| 1 | How strongly does the gap persist year over year in 2021–2026, and does it match the published r ≈ .43? | ✅ [Done](docs/step1.md) |
 | 2 | How does gap reliability change with sample size? (within-season split-half, shrinkage table) | ⬜ |
 | 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | ⬜ |
 | 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | ⬜ |
@@ -66,17 +81,19 @@ non-commercial use, so the repo ships the code to rebuild it rather than the dat
 | Savant batted-ball leaderboard | Pulled / straightaway / opposite-field air-ball rates | Min 50 batted balls |
 | Savant expected-stats leaderboard | PA, wOBA, xwOBA | Independent endpoint, used only to cross-check |
 | [MLB Stats API](https://statsapi.mlb.com) | PA by team, team and venue IDs, batting hand | Joined on MLBAM player ID |
+| Savant, 2015–2019 | PA, AB, pitches, wOBA, xwOBA, sprint speed | Era comparison and replication of published estimates (step 1) |
 
-**Dataset:** 2,774 player-seasons and 1,780 consecutive-season pairs. Column definitions:
+**Dataset:** 2,774 player-seasons and 1,780 consecutive-season pairs (2021–2026), plus
+2,216 player-seasons and 1,365 pairs (2015–2019). Column definitions:
 [`docs/data_dictionary.md`](docs/data_dictionary.md).
 
 ### Validation
 
-Every build runs 19 SQL checks ([`sql/02_validation.sql`](sql/02_validation.sql)):
+Every build runs 22 SQL checks ([`sql/02_validation.sql`](sql/02_validation.sql)):
 uniqueness at every join stage, all six seasons present, missing values in every column, plausible ranges, PA
 reconciliation between Savant and the MLB Stats API, and a cross-check of every
 player-season's PA, wOBA, and xwOBA against a second Savant endpoint (2,774 of 2,774
-match). Latest results: [`docs/validation_report.md`](docs/validation_report.md).
+match; 2,216 of 2,216 for 2015–2019). Latest results: [`docs/validation_report.md`](docs/validation_report.md).
 
 The PA reconciliation check caught a real bug: the MLB Stats API's team endpoint leaves out
 players who left a team midseason, which undercounted PA for 31 hitters and could assign
@@ -90,6 +107,8 @@ pip install -r requirements.txt
 python src/fetch_data.py   # download raw data (~2 min; skips cached files, --force to refresh)
 python src/build_db.py     # build data/statcast.duckdb, run checks (exits non-zero on a FAIL)
 pytest                     # same checks as a test suite
+python src/step1_persistence.py   # step 1 analysis -> results/step1_*.csv
+python src/step1_figures.py       # step 1 charts -> docs/figures/
 ```
 
 ## Repository layout
@@ -97,10 +116,13 @@ pytest                     # same checks as a test suite
 ```
 src/fetch_data.py         download Savant + MLB Stats API data to data/raw/
 src/build_db.py           build the DuckDB database, run checks, write the report
-sql/01_build_tables.sql   staging tables, player_season, season_pairs
+src/step1_*.py            step 1 analysis and figures
+sql/01_build_tables.sql   staging tables, player_season, season_pairs, 2015-19 history
 sql/02_validation.sql     data-quality checks
+sql/03_step1_pairs.sql    step 1 analysis table (centered and speed-adjusted gaps)
 tests/                    pytest wrapper around the validation checks
-docs/                     data dictionary, validation report, data notes
+results/                  step outputs (CSV)
+docs/                     step write-ups, figures, data dictionary, validation report, data notes
 ```
 
 ## About

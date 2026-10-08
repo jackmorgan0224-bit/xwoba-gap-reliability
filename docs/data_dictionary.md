@@ -12,6 +12,8 @@ One row per hitter per season, 2021–2026, minimum 100 PA. Percent columns are 
 | `season` | Season | Savant |
 | `player_name` | "Last, First" | Savant |
 | `pa` | Plate appearances, regular season | Savant |
+| `ab` | At-bats | Savant |
+| `pitches` | Pitches seen | Savant |
 | `woba` | Weighted on-base average (actual) | Savant |
 | `xwoba` | Expected wOBA from exit velocity, launch angle, and (on topped/weakly hit balls) sprint speed | Savant |
 | `woba_gap` | `woba - xwoba`. Positive = outperformed contact quality | derived |
@@ -43,6 +45,7 @@ One row per hitter per pair of consecutive seasons where both seasons are in `pl
 | `player_id`, `player_name` | Hitter |
 | `season_1` | First season of the pair (the second is `season_1 + 1`) |
 | `pa_1`, `pa_2` | PA in each season |
+| `min_ab`, `min_pitches` | Smaller of the two seasons' AB and pitches seen (to match published sample rules) |
 | `gap_1`, `gap_2` | `woba_gap` in each season |
 | `xwoba_1`, `woba_1`, `woba_2` | Season-1 xwOBA and wOBA, season-2 wOBA |
 | `same_team` | Same primary team both seasons (by team ID) |

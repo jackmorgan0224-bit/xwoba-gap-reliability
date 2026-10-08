@@ -38,8 +38,8 @@ WITH checks AS (
            12, 'FAIL'
 
     UNION ALL
-    SELECT 6, 'Missing value in any core Savant column (PA, wOBA, xwOBA, K%, BB%, contact, spray, batted-ball type, sprint speed)',
-           COUNT(*) FILTER (WHERE pa IS NULL OR woba IS NULL OR xwoba IS NULL
+    SELECT 6, 'Missing value in any core Savant column (PA, AB, pitches, wOBA, xwOBA, K%, BB%, contact, spray, batted-ball type, sprint speed)',
+           COUNT(*) FILTER (WHERE pa IS NULL OR ab IS NULL OR pitches IS NULL OR woba IS NULL OR xwoba IS NULL
                                OR k_pct IS NULL OR bb_pct IS NULL OR barrel_pct IS NULL
                                OR hard_hit_pct IS NULL OR sweet_spot_pct IS NULL
                                OR pull_pct IS NULL OR straight_pct IS NULL OR oppo_pct IS NULL
@@ -60,8 +60,9 @@ WITH checks AS (
 
     -- Plausibility
     UNION ALL
-    SELECT 9, 'wOBA or xwOBA outside plausible range (.100-.600)',
-           COUNT(*) FILTER (WHERE NOT (woba BETWEEN 0.1 AND 0.6 AND xwoba BETWEEN 0.1 AND 0.6)
+    SELECT 9, 'wOBA/xwOBA outside .100-.600, AB > PA, or pitches/PA outside 2.5-5',
+           COUNT(*) FILTER (WHERE NOT (woba BETWEEN 0.1 AND 0.6 AND xwoba BETWEEN 0.1 AND 0.6
+                                       AND ab <= pa AND pitches BETWEEN 2.5 * pa AND 5 * pa)
                                OR woba IS NULL OR xwoba IS NULL),
            COUNT(*), 'WARN'
     FROM player_season
@@ -111,19 +112,41 @@ WITH checks AS (
            COUNT(*) FILTER (WHERE pull_air_pct IS NULL), COUNT(*), 'WARN'
     FROM player_season
 
+    -- History (2015-2019)
+    UNION ALL
+    SELECT 17, 'History: seasons 2015-2019 missing',
+           5 - (SELECT COUNT(DISTINCT season) FROM history_season WHERE season BETWEEN 2015 AND 2019),
+           5, 'FAIL'
+
+    UNION ALL
+    SELECT 18, 'History: duplicate player-seasons',
+           COUNT(*) - COUNT(DISTINCT (player_id, season)), COUNT(*), 'FAIL'
+    FROM history_season
+
+    UNION ALL
+    SELECT 19, 'History: PA, wOBA, or xwOBA missing or disagreeing with Savant expected-stats leaderboard',
+           COUNT(*) FILTER (WHERE x.player_id IS NULL OR h.woba IS NULL OR h.xwoba IS NULL
+                               OR h.ab IS NULL OR h.pitches IS NULL
+                               OR NOT (h.pa = x.pa
+                                       AND ABS(h.woba - x.woba) <= 0.0005
+                                       AND ABS(h.xwoba - x.xwoba) <= 0.0005)),
+           COUNT(*), 'FAIL'
+    FROM history_season AS h
+    LEFT JOIN xcheck_history_expected AS x USING (player_id, season)
+
     -- Descriptive counts
     UNION ALL
-    SELECT 17, 'Played for 2+ teams in the season',
+    SELECT 20, 'Played for 2+ teams in the season',
            COUNT(*) FILTER (WHERE n_teams > 1), COUNT(*), 'INFO'
     FROM player_season
 
     UNION ALL
-    SELECT 18, 'No single home park (2021 Blue Jays)',
+    SELECT 21, 'No single home park (2021 Blue Jays)',
            COUNT(*) FILTER (WHERE primary_venue_id IS NULL AND primary_team_id IS NOT NULL), COUNT(*), 'INFO'
     FROM player_season
 
     UNION ALL
-    SELECT 19, 'Consecutive-season pairs (both seasons 100+ PA)',
+    SELECT 22, 'Consecutive-season pairs (both seasons 100+ PA)',
            COUNT(*), COUNT(*), 'INFO'
     FROM season_pairs
 )

@@ -12,21 +12,25 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 SEASONS = range(2021, 2027)
+HISTORY_SEASONS = range(2015, 2020)
 RAW_PREFIXES = ["savant_custom", "savant_batted_ball", "savant_expected", "statsapi_team_pa"]
+HISTORY_PREFIXES = ["history_custom", "history_expected"]
 DB_PATH = ROOT / "data" / "statcast.duckdb"
 REPORT_PATH = ROOT / "docs" / "validation_report.md"
 
 
 def main() -> None:
     os.chdir(ROOT)  # SQL files use paths relative to the repo root
-    missing = [f"{prefix}_{season}.csv" for prefix in RAW_PREFIXES for season in SEASONS
-               if not (ROOT / "data" / "raw" / f"{prefix}_{season}.csv").exists()]
+    expected_files = [f"{prefix}_{season}.csv" for prefix in RAW_PREFIXES for season in SEASONS]
+    expected_files += [f"{prefix}_{season}.csv" for prefix in HISTORY_PREFIXES for season in HISTORY_SEASONS]
+    missing = [name for name in expected_files if not (ROOT / "data" / "raw" / name).exists()]
     if missing:
         sys.exit(f"Missing raw files (run src/fetch_data.py first): {', '.join(missing)}")
     con = duckdb.connect(str(DB_PATH))
     con.execute((ROOT / "sql" / "01_build_tables.sql").read_text(encoding="utf-8"))
 
-    for table in ["stg_savant_custom", "stg_batted_ball", "stg_team_pa", "xcheck_expected", "player_season", "season_pairs"]:
+    for table in ["stg_savant_custom", "stg_batted_ball", "stg_team_pa", "xcheck_expected",
+                  "player_season", "season_pairs", "history_season", "history_pairs"]:
         print(f"{table:<20} {con.table(table).count('*').fetchone()[0]:>6} rows")
 
     results = con.execute((ROOT / "sql" / "02_validation.sql").read_text(encoding="utf-8")).fetchall()

@@ -11,6 +11,8 @@ Sources
 - Savant expected-stats leaderboard: an independent copy of PA / wOBA / xwOBA used only
   to cross-check the custom leaderboard
 - MLB Stats API: PA by player x team (splits players who changed teams) and batting hand
+- History (2015-2019): PA / AB / pitches / wOBA / xwOBA / sprint speed only, from both Savant endpoints, to rerun the
+  persistence analysis on the seasons the published estimates used
 """
 
 import argparse
@@ -21,6 +23,7 @@ from pathlib import Path
 import requests
 
 SEASONS = range(2021, 2027)
+HISTORY_SEASONS = range(2015, 2020)
 RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
 HEADERS = {"User-Agent": "xwoba-gap-reliability (personal research project)"}
 PAUSE_SECONDS = 1.0
@@ -29,7 +32,7 @@ MAX_ATTEMPTS = 4  # retries cover the occasional dropped connection from either 
 # Savant silently returns an empty column for an unknown key, so sql/02_validation.sql
 # checks every one of these columns for missing values.
 CUSTOM_FIELDS = [
-    "pa", "woba", "xwoba", "k_percent", "bb_percent",
+    "pa", "ab", "pitch_count", "woba", "xwoba", "k_percent", "bb_percent",
     "barrel_batted_rate", "hard_hit_percent", "sweet_spot_percent",
     "pull_percent", "straightaway_percent", "opposite_percent",
     "groundballs_percent", "flyballs_percent", "linedrives_percent",
@@ -158,6 +161,21 @@ def main() -> None:
             args.force,
         )
         save_team_pa(season, args.force)
+
+    for season in HISTORY_SEASONS:
+        print(f"{season} (history)")
+        save_csv(
+            RAW_DIR / f"history_custom_{season}.csv",
+            SAVANT_CUSTOM_URL.format(season=season, fields="pa,ab,pitch_count,woba,xwoba,sprint_speed"),
+            "xwoba",
+            args.force,
+        )
+        save_csv(
+            RAW_DIR / f"history_expected_{season}.csv",
+            SAVANT_EXPECTED_URL.format(season=season),
+            "est_woba",
+            args.force,
+        )
 
 
 if __name__ == "__main__":

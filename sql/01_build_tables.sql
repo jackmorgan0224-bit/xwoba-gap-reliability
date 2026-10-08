@@ -9,6 +9,8 @@ SELECT
     CAST("year" AS INTEGER)                 AS season,
     "last_name, first_name"                 AS player_name,
     CAST(pa AS INTEGER)                     AS pa,
+    TRY_CAST(ab AS INTEGER)                 AS ab,
+    TRY_CAST(pitch_count AS INTEGER)        AS pitches,
     TRY_CAST(woba AS DOUBLE)                AS woba,
     TRY_CAST(xwoba AS DOUBLE)               AS xwoba,
     TRY_CAST(k_percent AS DOUBLE)           AS k_pct,
@@ -113,6 +115,8 @@ SELECT
     y1.season                   AS season_1,
     y1.pa                       AS pa_1,
     y2.pa                       AS pa_2,
+    LEAST(y1.ab, y2.ab)           AS min_ab,
+    LEAST(y1.pitches, y2.pitches) AS min_pitches,
     y1.woba_gap                 AS gap_1,
     y2.woba_gap                 AS gap_2,
     y1.xwoba                    AS xwoba_1,
@@ -122,5 +126,46 @@ SELECT
     y1.primary_venue_id = y2.primary_venue_id AS same_park  -- NULL when either park is unknown
 FROM player_season AS y1
 JOIN player_season AS y2
+    ON y2.player_id = y1.player_id
+   AND y2.season = y1.season + 1;
+
+-- History, 2015-2019: PA / wOBA / xwOBA as Savant reports them today, used only to rerun
+-- the persistence analysis on the seasons the published estimates covered.
+CREATE OR REPLACE TABLE history_season AS
+SELECT
+    CAST(player_id AS INTEGER)  AS player_id,
+    CAST("year" AS INTEGER)     AS season,
+    "last_name, first_name"     AS player_name,
+    CAST(pa AS INTEGER)         AS pa,
+    TRY_CAST(ab AS INTEGER)     AS ab,
+    TRY_CAST(pitch_count AS INTEGER) AS pitches,
+    TRY_CAST(woba AS DOUBLE)    AS woba,
+    TRY_CAST(xwoba AS DOUBLE)   AS xwoba,
+    TRY_CAST(sprint_speed AS DOUBLE) AS sprint_speed,
+    TRY_CAST(woba AS DOUBLE) - TRY_CAST(xwoba AS DOUBLE) AS woba_gap
+FROM read_csv('data/raw/history_custom_*.csv', all_varchar = true, header = true);
+
+CREATE OR REPLACE TABLE xcheck_history_expected AS
+SELECT
+    CAST(player_id AS INTEGER) AS player_id,
+    CAST("year" AS INTEGER)    AS season,
+    CAST(pa AS INTEGER)        AS pa,
+    CAST(woba AS DOUBLE)       AS woba,
+    CAST(est_woba AS DOUBLE)   AS xwoba
+FROM read_csv('data/raw/history_expected_*.csv', all_varchar = true, header = true);
+
+CREATE OR REPLACE TABLE history_pairs AS
+SELECT
+    y1.player_id,
+    y1.player_name,
+    y1.season   AS season_1,
+    y1.pa       AS pa_1,
+    y2.pa       AS pa_2,
+    LEAST(y1.ab, y2.ab)           AS min_ab,
+    LEAST(y1.pitches, y2.pitches) AS min_pitches,
+    y1.woba_gap AS gap_1,
+    y2.woba_gap AS gap_2
+FROM history_season AS y1
+JOIN history_season AS y2
     ON y2.player_id = y1.player_id
    AND y2.season = y1.season + 1;

@@ -45,6 +45,8 @@ rows with missing data. Every check now counts a missing value as flagged.
 - **No batted-ball leaderboard row** (2 player-seasons: Andrew Young 2021 with 47 balls in
   play, Zack Gelof 2025 with 48), below that leaderboard's 50-batted-ball minimum. They
   drop out of any model that uses pulled-air rate.
+- **Pitches-per-PA plausibility bound is 2.5–5.0**, not 3.0: the first version flagged
+  Willians Astudillo (2021, 2.84 pitches/PA), a real and famously aggressive swinger.
 - **Batting hand is the player's current listing**, not per season, so a hitter who
   changed sides would be mislabeled in earlier seasons.
 - **Savant can revise its expected stats.** Results reflect the data as downloaded on
