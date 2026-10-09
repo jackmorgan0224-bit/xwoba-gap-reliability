@@ -1,15 +1,40 @@
 # How Much Should a Front Office Trust a Hitter's xwOBA Gap?
 
-When a hitter's actual production (wOBA) runs well ahead of or behind his Statcast expected
-production (xwOBA), the usual read is "luck, it'll regress." But part of that gap is
-repeatable skill that xwOBA doesn't see. This project measures **how much of the gap to
-believe, given how many batted balls we've seen and what kind of hitter he is**, and turns
-that into a discount a front office can apply when evaluating trade and free-agent targets.
+## The short version
 
-> **Status: complete (Oct 2026).** All five steps are done. The front-office memo applying
-> them to 2026 hitters and the Mets roster: [`docs/memo.md`](docs/memo.md).
+**The question:** When a hitter's results beat the quality of his contact, is that skill or
+luck, and how much should a team pay for it?
 
-## Findings
+**Two terms:**
+- **wOBA** measures what a hitter actually produced: hits, walks and home runs, weighted by
+  how much each is worth.
+- **xwOBA** (expected wOBA) measures what he *should* have produced, based on how hard and
+  at what angle he hit the ball.
+- The **gap** between them is the question. A hitter with a .350 wOBA and a .320 xwOBA got
+  30 points more than his contact earned.
+
+**What I found, using every MLB plate appearance from 2021–2026:**
+
+1. **To predict next season, ignore the gap.** Expected stats alone forecast next year as
+   well as anything that adds the gap back in. Teams should price hitters on contact quality,
+   not results.
+2. **Even a full season's gap is mostly luck.** Only about 25% of it carries into next season. It takes roughly
+   two and a half seasons of data before the gap is even half signal.
+3. **The gap is less reliable than published research says.** It repeats about a third less
+   in 2021–26 than in 2015–19. I confirmed this by first reproducing the earlier published
+   result on its original data.
+
+**What I'd tell a front office:** Arozarena's 2026 line overstates him by about 40 points.
+Seven of eight Mets regulars hit below their contact quality, so the roster is better than
+its 2026 numbers. Details: [front-office memo](docs/memo.md).
+
+**Skills shown:** SQL (DuckDB), Python, building and validating a data pipeline (22 automated
+checks, one of which caught a real data bug), reproducing published research, out-of-sample
+testing, and turning the results into a memo for decision-makers.
+
+> **Status: complete (Oct 2026).**
+
+## Findings in detail
 
 1. **To project next season, use xwOBA and ignore the gap.** Adding a hitter's
    wOBA–xwOBA gap to his xwOBA doesn't improve next-season wOBA forecasts (+0.01 points of
