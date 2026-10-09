@@ -57,10 +57,8 @@ and Arraez will be marketed on 2026 numbers that their contact quality doesn't s
   across 2021–26, all hitters' results at Citi Field ran 8 points per ball in play below
   xwOBA, the 7th-lowest of 32 parks ([step 3](step3.md)). Adjusting projections for park didn't
   measurably improve accuracy, so this is context, not an extra adjustment.
-- **Luis Robert Jr. (club option, $20 million, per MLB.com):** only 230 PA in 2026, so
-  outside the board. His xwOBA was .321 in both 2025 (431 PA) and 2026, which projects to
-  about .324, near league average. That's offense only; defense and baserunning are outside
-  this model.
+- **Luis Robert Jr. is no longer a Mets decision.** He finished 2026 with Baltimore (218 PA
+  with us, 12 with the Orioles; current team per the MLB Stats API, October 8, 2026).
 
 ## Buy-low trade targets
 
@@ -84,8 +82,13 @@ their contact quality supports. Contract status for these hitters was not checke
   star.
 - **Discount the two catchers.** Realmuto and Perez are in their mid-30s and the projection
   has no age adjustment, so their numbers are likely optimistic.
-- **Duran, Smith, Crews, and Hoerner are the cleaner cases:** younger or in their primes,
-  with a down 2026 that their contact quality doesn't support.
+- **Smith and Crews are the cleaner cases:** both 24 or younger, with a down 2026 that
+  their contact quality doesn't support.
+- **Duran's decline looks partly real:** his xwOBA fell three straight years (.340, .326,
+  .301), so the gap explains only part of his drop.
+- **Hoerner and Ramírez are unlikely to be available.** Hoerner signed a six-year extension
+  with the Cubs in March 2026, and Ramírez's extension through 2032 includes a full
+  no-trade clause (press reports).
 - Five more hitters were also understated by 25+ points (Nasim Nuñez, Zach McKinstry,
   Ezequiel Tovar, Masyn Winn, Evan Carter) but project below .312, so a cheaper price
   still buys a below-average bat.
