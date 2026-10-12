@@ -5,8 +5,8 @@ I answered it with every MLB plate appearance from 2021–2026, a validated SQL 
 
 | | |
 |---|---|
-| **Short answer** | Price hitters on **xwOBA** and ignore the gap. It adds nothing to next-season forecasts. |
-| **Front-office takeaway** | Arozarena's 2026 line overstates him by ~40 points. Seven of eight Mets regulars hit below their contact quality. → [**Read the 1-page memo**](docs/memo.md) |
+| **Short answer** | Price hitters on **xwOBA** and ignore the gap. It adds nothing to next-season forecasts, even with three seasons of history. |
+| **Front-office takeaway** | Arozarena's 2026 line overstates him by ~50 points. Seven of eight Mets regulars project above their 2026 numbers. → [**Read the 1-page memo**](docs/memo.md) |
 | **Data** | 2,774 player-seasons (2021–26) + 2,216 (2015–19), Baseball Savant + MLB Stats API, reconciled to 0 PA mismatches |
 | **Built with** | Python · SQL (DuckDB) · pytest · bootstrapped confidence intervals |
 | **Status** | ✅ Complete (Oct 2026) |
@@ -26,7 +26,7 @@ I answered it with every MLB plate appearance from 2021–2026, a validated SQL 
 - **xwOBA:** what he *should* have produced, given how hard and at what angle he hit the ball.
 - **The gap:** wOBA − xwOBA. A .350 wOBA with a .320 xwOBA is a +30 gap.
 
-## Four findings
+## Five findings
 
 | # | Finding | The number | Details |
 |---|---|---|---|
@@ -34,15 +34,16 @@ I answered it with every MLB plate appearance from 2021–2026, a validated SQL 
 | 2 | **Even a full season's gap is mostly luck.** | ~25% carries into next season; half signal only after ~1,000 balls in play (≈2.5 seasons) | [Step 2](docs/step2.md) |
 | 3 | **The part that repeats is mostly pulled power.** | A pulled 100–105 mph fly ball beats xwOBA by **+502** points; the same ball to center/opposite field falls **270** short | [Step 3](docs/step3.md) |
 | 4 | **The gap repeats less than published research says.** | Year-over-year r = **.38** (2015–19) → **.25** (2021–26); published result reproduced first (r = .42 vs. .43) | [Step 1](docs/step1.md) |
+| 5 | **Three seasons plus age beat one season, and the gap still doesn't help.** | Forecast error falls **0.86 points** (95% CI 0.28–1.45); adding a 3-season gap: −0.02 (CI −0.09 to +0.05) | [Step 6](docs/step6.md) |
 
-**The projection rule that comes out of it:** next wOBA ≈ league + .003 + 0.56 × (xwOBA − league), typical miss ±28 points.
+**The projection the memo uses:** three seasons of xwOBA weighted 5/4/3, shrunk toward league by playing time, plus an aging curve (peak 27). Typical miss ±28 points. [Details](docs/step6.md)
 
 ## Where to go next
 
 | You have... | Read |
 |---|---|
 | **2 minutes** | [The front-office memo](docs/memo.md): free agents, Mets hitters, buy-low trade targets |
-| **10 minutes** | The step write-ups, each opening with a one-paragraph answer: [1](docs/step1.md) · [2](docs/step2.md) · [3](docs/step3.md) · [4](docs/step4.md) |
+| **10 minutes** | The step write-ups, each opening with a one-paragraph answer: [1](docs/step1.md) · [2](docs/step2.md) · [3](docs/step3.md) · [4](docs/step4.md) · [6](docs/step6.md) |
 | **An interest in the data engineering** | [How the pipeline works](#how-the-pipeline-works) · [validation report](docs/validation_report.md) · [data notes](docs/data_notes.md) · [data dictionary](docs/data_dictionary.md) |
 | **A laptop** | [Reproduce it](#reproduce-it) |
 
@@ -59,7 +60,7 @@ flowchart LR
     E -- "any FAIL" --> X["build stops"]
     E -- "all pass" --> F["Steps 1–4<br/>analysis + figures"]
     F --> G["results/*.csv"]
-    F --> H["Step 5<br/>2027 board + memo"]
+    F --> H["Steps 5–6<br/>2027 board + memo"]
 ```
 
 **Validation is the backbone.** Every build runs 22 SQL checks ([`sql/02_validation.sql`](sql/02_validation.sql)): uniqueness at every join stage, all seasons present, missing values, plausible ranges, PA reconciliation between Savant and the MLB Stats API, and a cross-check of every player-season's PA, wOBA, and xwOBA against a second Savant endpoint (**2,774 of 2,774 match**; 2,216 of 2,216 for 2015–19).
@@ -107,13 +108,14 @@ What this project adds:
 | 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | [Step 3](docs/step3.md) |
 | 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | [Step 4](docs/step4.md) |
 | 5 | Which 2026 hitters' results misstate their underlying quality? | [Memo](docs/memo.md) |
+| 6 | Do three seasons and age improve the projection, and does the gap help then? | [Step 6](docs/step6.md) |
 
 </details>
 
 <details>
 <summary><b>Limitations</b> (click to expand)</summary>
 
-- Projections are **offense only**, use **one season** of history, and have **no age adjustment**. They rank hitters by what 2026 contact quality supports; they aren't full player valuations.
+- Projections are **offense only**, with a simple two-slope **age curve** (peak 27) rather than position-specific aging. They rank hitters by what contact quality and track record support; they aren't full player valuations.
 - 2027's league offensive level is unknown; projections are relative to 2026's.
 - Contract status in the memo comes from public reporting (MLB.com, August 2026), not team records.
 
@@ -139,7 +141,8 @@ python src/step2_reliability.py   # step 2 (~20 min, mostly bootstrap) -> result
 python src/step3_traits.py        # step 3 -> results/step3_*.csv
 python src/step23_figures.py      # step 2-3 charts
 python src/step4_projection.py    # step 4 -> results/step4_*.csv
-python src/step5_board.py         # step 5: 2027 projections -> results/step5_board.csv
+python src/step5_board.py         # step 5: one-season 2027 projections -> results/step5_board.csv
+python src/step6_multiseason.py   # step 6: 3-season + age test and board -> results/step6_*.csv
 ```
 
 </details>

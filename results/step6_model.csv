@@ -1,0 +1,2 @@
+model,intercept,slope_shrunk_wx,age_young_per_year,age_old_per_year,shrink_c_pa,fit_pairs
+3-season xwOBA + age,0.0037631720751756456,1.0281955819802686,-0.001481510185067877,-0.0012500908611219488,2750,994

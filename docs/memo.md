@@ -1,105 +1,79 @@
 # Memo: Reading 2026 batting lines for 2027 decisions
 
-**To:** Baseball Operations · **From:** Jack Eisinger · **Date:** October 8, 2026
+**To:** Baseball Operations · **From:** Jack Eisinger · **Date:** October 12, 2026 (updated from October 8 with the step 6 projection)
 **Re:** Which 2026 batting lines overstate or understate what to expect in 2027
 
 ## Bottom line
 
-1. **Price hitters on xwOBA, not wOBA, and ignore the gap between them.** A hitter's 2026
-   wOBA–xwOBA gap adds nothing to a 2027 projection once xwOBA is known
-   ([step 4](step4.md)). Rule: 2027 wOBA ≈ league + .003 + 0.56 × (2026 xwOBA − league).
-   Typical miss: ±28 points.
-2. **Randy Arozarena's 2026 line overstates him most among the pending free agents
-   checked:** .379 wOBA, but a .348 xwOBA projects to .339.
-3. **On our roster, Marcus Semien's 2026 understates him most:** .276 wOBA, .300 xwOBA,
-   projects to .312. Bo Bichette and Brett Baty also project about 20 points above their 2026
-   wOBA.
-4. **None of the six pending free agents checked hit below their projection, so the
-   buy-low names are trade targets.** Jarren Duran, Cam Smith, Dylan Crews, and Nico Hoerner
-   each project 28–39 points above their 2026 wOBA. The six come from a list of the biggest
-   names, which leans toward hitters coming off strong (often lucky) years; a full
-   free-agent class would likely include some understated hitters.
+1. **Price hitters on xwOBA, not wOBA, and ignore the gap between them.** The wOBA–xwOBA gap adds nothing to a projection, whether it uses one season ([step 4](step4.md)) or three ([step 6](step6.md)). Projections here weight three seasons of xwOBA and adjust for age, which beats a one-season rule out of sample. Typical miss: ±28 points.
+2. **Randy Arozarena's 2026 line overstates him most among the pending free agents checked:** .379 wOBA, but he projects to .329, 50 points lower.
+3. **On our roster, Marcus Semien's 2026 understates him most** (.276 vs. a .306 projection). Seven of eight regulars project above their 2026 wOBA, Juan Soto included.
+4. **The biggest understated bats are stars on long-term deals,** led by Vladimir Guerrero Jr. (−57). The realistic buy-low targets are a tier down: Jarren Duran, Cam Smith, Dylan Crews, and Matt McLain.
 
 ## Pending free agents
 
-Hitters named as pending free agents in MLB.com's
-[free agents by team](https://www.mlb.com/news/baseball-s-biggest-free-agents-by-team-for-2026-2027)
-(updated August 10, 2026), 400+ PA in 2026. 2026 league wOBA: .319.
+Hitters named as pending free agents in MLB.com's [free agents by team](https://www.mlb.com/news/baseball-s-biggest-free-agents-by-team-for-2026-2027) (updated August 10, 2026), 400+ PA in 2026. 2026 league wOBA: .319.
 
-| Hitter | 2026 team | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
-|---|---|---:|---:|---:|---:|---:|
-| Randy Arozarena | SEA | 670 | .379 | .348 | .339 | +40 |
-| Brandon Lowe | PIT | 655 | .355 | .331 | .330 | +25 |
-| Luis Arraez | SF, PHI | 655 | .331 | .307 | .316 | +15 |
-| George Springer | TOR | 517 | .320 | .306 | .316 | +4 |
-| Jazz Chisholm Jr. | NYY | 532 | .312 | .294 | .309 | +3 |
-| Gleyber Torres | DET | 420 | .328 | .325 | .326 | +2 |
+| Hitter | 2026 team | Age in 2027 | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Randy Arozarena | SEA | 32 | 670 | .379 | .348 | .329 | +50 |
+| Brandon Lowe | PIT | 32 | 655 | .355 | .331 | .328 | +27 |
+| Luis Arraez | SF | 30 | 655 | .331 | .307 | .314 | +17 |
+| Gleyber Torres | DET | 30 | 420 | .328 | .325 | .332 | −4 |
+| Jazz Chisholm Jr. | NYY | 29 | 532 | .312 | .294 | .319 | −7 |
+| George Springer | TOR | 37 | 517 | .320 | .306 | .330 | −10 |
 
-Positive = the 2026 line is above what to expect in 2027 (points of wOBA). Arozarena, Lowe,
-and Arraez will be marketed on 2026 numbers that their contact quality doesn't support.
+Positive = the 2026 line is above what to expect in 2027 (points of wOBA).
+- **Arozarena, Lowe, and Arraez will be marketed on 2026 numbers that neither their contact quality nor their track record supports.** Arozarena's gap widened with the age adjustment (+40 → +50).
+- **Torres, Chisholm, and Springer are within normal noise** (±28). Springer's .330 leans on strong earlier seasons; at 37, discount it further.
 
 ## Mets hitters (400+ PA in 2026)
 
-| Hitter | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
-|---|---:|---:|---:|---:|---:|
-| Juan Soto | 482 | .385 | .411 | .375 | +10 |
-| Carson Benge | 654 | .342 | .341 | .335 | +7 |
-| Francisco Lindor | 469 | .322 | .331 | .330 | −8 |
-| Francisco Álvarez | 420 | .313 | .322 | .325 | −12 |
-| A.J. Ewing | 492 | .311 | .320 | .324 | −13 |
-| Brett Baty | 473 | .304 | .321 | .324 | −20 |
-| Bo Bichette | 696 | .309 | .330 | .329 | −20 |
-| Marcus Semien | 547 | .276 | .300 | .312 | −36 |
+| Hitter | Age in 2027 | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
+|---|---:|---:|---:|---:|---:|---:|
+| Carson Benge | 24 | 654 | .342 | .341 | .340 | +2 |
+| Francisco Álvarez | 25 | 420 | .313 | .322 | .325 | −12 |
+| Francisco Lindor | 33 | 469 | .322 | .331 | .339 | −17 |
+| A.J. Ewing | 22 | 492 | .311 | .320 | .331 | −20 |
+| Brett Baty | 27 | 473 | .304 | .321 | .325 | −21 |
+| Juan Soto | 28 | 482 | .385 | .411 | .407 | −22 |
+| Bo Bichette | 29 | 696 | .309 | .330 | .332 | −23 |
+| Marcus Semien | 36 | 547 | .276 | .300 | .306 | −30 |
 
-- **Soto's +10 isn't a warning.** It's ordinary regression toward the league for the best
-  contact quality on the team (.411 xwOBA); he still projects highest by 40 points.
-- **Seven of eight regulars hit below their xwOBA in 2026.** Citi Field may be part of it:
-  across 2021–26, all hitters' results at Citi Field ran 8 points per ball in play below
-  xwOBA, the 7th-lowest of 32 parks ([step 3](step3.md)). Adjusting projections for park didn't
-  measurably improve accuracy, so this is context, not an extra adjustment.
-- **Luis Robert Jr. is no longer a Mets decision.** He finished 2026 with Baltimore (218 PA
-  with us, 12 with the Orioles; current team per the MLB Stats API, October 8, 2026).
+- **The roster is better than its 2026 numbers.** Seven of eight regulars project above their 2026 wOBA. Citi Field may be part of it: across 2021–26, all hitters' results there ran 8 points per ball in play below xwOBA, the 7th-lowest of 32 parks ([step 3](step3.md)). Adjusting for park didn't measurably improve forecasts, so this is context, not an extra adjustment.
+- **Soto flipped from "slightly overstated" to "understated."** One season of regression (step 5) pulled him toward league; three elite seasons say his .411 xwOBA is mostly real. He projects highest on the roster by 67 points.
+- **Semien is still understated, but he's 36.** The age adjustment already takes about 12 points off; a .306 projection is a below-average bat.
+- **Luis Robert Jr. is no longer a Mets decision.** He finished 2026 with Baltimore (current team per the MLB Stats API, October 8, 2026).
 
-## Buy-low trade targets
+## Understated hitters on other teams
 
-None of the six pending free agents above hit below their projection, so the board points
-to trade targets instead: hitters on other teams whose 2026 line sits 25+ points below what
-their contact quality supports. Contract status for these hitters was not checked.
+Hitters whose 2026 line sits 30+ points below their projection.
 
-| Hitter | 2026 team | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
-|---|---|---:|---:|---:|---:|---:|
-| J.T. Realmuto | PHI | 467 | .275 | .317 | .322 | −47 |
-| Jarren Duran | BOS | 608 | .274 | .301 | .313 | −39 |
-| Salvador Perez | KC | 627 | .285 | .316 | .321 | −36 |
-| Matt McLain | CIN | 496 | .272 | .293 | .308 | −36 |
-| Cam Smith | HOU | 568 | .293 | .316 | .321 | −28 |
-| Dylan Crews | WSH | 443 | .294 | .317 | .322 | −28 |
-| Nico Hoerner | CHC | 689 | .297 | .322 | .325 | −28 |
-| José Ramírez | CLE | 544 | .301 | .325 | .326 | −25 |
+| Hitter | 2026 team | Age in 2027 | PA | 2026 wOBA | 2026 xwOBA | 2027 projection | 2026 line vs. projection |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Vladimir Guerrero Jr. | TOR | 28 | 609 | .305 | .331 | .362 | −57 |
+| Jarren Duran | BOS | 30 | 608 | .274 | .301 | .320 | −46 |
+| Salvador Perez | KC | 37 | 627 | .285 | .316 | .328 | −43 |
+| Cal Raleigh | SEA | 30 | 530 | .297 | .312 | .338 | −41 |
+| J.T. Realmuto | PHI | 36 | 467 | .275 | .317 | .314 | −39 |
+| Corey Seager | TEX | 33 | 436 | .320 | .350 | .357 | −37 |
+| Jackson Merrill | SD | 24 | 664 | .320 | .347 | .354 | −34 |
+| Austin Riley | ATL | 30 | 630 | .290 | .299 | .323 | −33 |
+| Matt McLain | CIN | 27 | 496 | .272 | .293 | .305 | −33 |
+| Ketel Marte | AZ | 33 | 624 | .323 | .349 | .355 | −32 |
+| Cam Smith | HOU | 24 | 568 | .293 | .316 | .323 | −30 |
+| Dylan Crews | WSH | 25 | 443 | .294 | .317 | .324 | −30 |
 
-- **These are league-average bats priced like below-average ones.** Every projection falls
-  between .308 and .326. The case is paying less than the 2026 line implies, not finding a
-  star.
-- **Discount the two catchers.** Realmuto and Perez are in their mid-30s and the projection
-  has no age adjustment, so their numbers are likely optimistic.
-- **Smith and Crews are the cleaner cases:** both 24 or younger, with a down 2026 that
-  their contact quality doesn't support.
-- **Duran's decline looks partly real:** his xwOBA fell three straight years (.340, .326,
-  .301), so the gap explains only part of his drop.
-- **Hoerner and Ramírez are unlikely to be available.** Hoerner signed a six-year extension
-  with the Cubs in March 2026, and Ramírez's extension through 2032 includes a full
-  no-trade clause (press reports).
-- Five more hitters were also understated by 25+ points (Nasim Nuñez, Zach McKinstry,
-  Ezequiel Tovar, Masyn Winn, Evan Carter) but project below .312, so a cheaper price
-  still buys a below-average bat.
+- **The stars (Guerrero, Raleigh, Seager, Merrill, Riley, Marte) are mostly not available.** Per press reports, all six are on long-term contracts. For them, the board's value is a warning not to read their 2026 lines as decline, for example when they show up in division matchups.
+- **Realistic targets are a tier down.** Duran, Smith, Crews, and McLain project as roughly league-average bats (.305–.324) coming off down years that their contact and track record don't support. Smith and Crews, at 24 and 25, are the cleanest cases.
+- **Discount the catchers less than before, but still discount them.** Perez (37) and Realmuto (36) already carry the age adjustment; catcher-specific aging is likely steeper than this simple curve.
+- **Duran's decline looks partly real:** his xwOBA fell three straight years (.340, .326, .301).
+- Four more hitters were understated by 30+ but project below .310 (Nasim Nuñez, Ezequiel Tovar, Zach McKinstry, Evan Carter), so a cheaper price still buys a below-average bat.
 
 ## Before acting
 
-- **Contract status** comes only from the MLB.com article above (August 2026). Confirm
-  options, opt-outs, and extensions against our own records.
-- **Projections are offense only** and use one season, with no age adjustment. They rank
-  hitters by what 2026 contact quality supports; they aren't full player valuations.
-- **Individual projections are uncertain** (±28 points), so a 2026 line that differs from
-  projection by 10–15 points is within normal noise. The board is most useful at its ends.
+- **Contract status** comes from public reporting (MLB.com, August 2026, and press reports). Confirm options, opt-outs, and extensions against our own records.
+- **Projections are offense only** and use a simple two-slope age curve (peak 27), not position-specific aging. They rank hitters by what contact quality and track record support; they aren't full player valuations.
+- **Individual projections are uncertain** (±28 points), so a gap of 10–15 points between the 2026 line and the projection is within normal noise. The board is most useful at its ends.
 
-Full board: [`results/step5_board.csv`](../results/step5_board.csv) (205 hitters with 400+ PA).
+Full board, with both the step 5 and step 6 projections: [`results/step6_board.csv`](../results/step6_board.csv) (205 hitters with 400+ PA).
