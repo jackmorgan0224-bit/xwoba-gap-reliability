@@ -1,117 +1,75 @@
 # How Much Should a Front Office Trust a Hitter's xwOBA Gap?
 
-## The short version
+**When a hitter's results beat the quality of his contact, is that skill or luck, and how much should a team pay for it?**
+I answered it with every MLB plate appearance from 2021–2026, a validated SQL pipeline, and out-of-sample forecast tests.
 
-**The question:** When a hitter's results beat the quality of his contact, is that skill or
-luck, and how much should a team pay for it?
-
-**Two terms:**
-- **wOBA** measures what a hitter actually produced: hits, walks and home runs, weighted by
-  how much each is worth.
-- **xwOBA** (expected wOBA) measures what he *should* have produced, based on how hard and
-  at what angle he hit the ball.
-- The **gap** between them is the question. A hitter with a .350 wOBA and a .320 xwOBA got
-  30 points more than his contact earned.
-
-**What I found, using every MLB plate appearance from 2021–2026:**
-
-1. **To predict next season, ignore the gap.** Expected stats alone forecast next year as
-   well as anything that adds the gap back in. Teams should price hitters on contact quality,
-   not results.
-2. **Even a full season's gap is mostly luck.** Only about 25% of it carries into next season. It takes roughly
-   two and a half seasons of data before the gap is even half signal.
-3. **The gap is less reliable than published research says.** It repeats about a third less
-   in 2021–26 than in 2015–19. I confirmed this by first reproducing the earlier published
-   result on its original data.
-
-**What I'd tell a front office:** Arozarena's 2026 line overstates him by about 40 points.
-Seven of eight Mets regulars hit below their contact quality, so the roster is better than
-its 2026 numbers. Details: [front-office memo](docs/memo.md).
-
-**Skills shown:** SQL (DuckDB), Python, building and validating a data pipeline (22 automated
-checks, one of which caught a real data bug), reproducing published research, out-of-sample
-testing, and turning the results into a memo for decision-makers.
-
-> **Status: complete (Oct 2026).**
-
-## Findings in detail
-
-1. **To project next season, use xwOBA and ignore the gap.** Adding a hitter's
-   wOBA–xwOBA gap to his xwOBA doesn't improve next-season wOBA forecasts (+0.01 points of
-   error, 95% CI −0.04 to +0.06). The gap partly repeats, but hitters who beat their xwOBA
-   also see their xwOBA fall the next year by about as much. Rule: next wOBA ≈ league +
-   0.56 × (xwOBA − league). [Step 4](docs/step4.md)
-2. **Even a full season's gap is mostly noise.** The gap is half signal only after about
-   1,000 balls in play (95% CI 780–1,370), roughly two and a half seasons. For one full
-   season, believe about 25% of it when projecting next year. Trusting the whole gap
-   forecasts worse than assuming it's pure luck. [Step 2](docs/step2.md)
-3. **The part that repeats is mostly pulled power.** xwOBA ignores direction: a pulled fly
-   ball at 100–105 mph beats its expected wOBA by 502 points on average, while the same ball
-   to center or the opposite field falls 270 short. Parks (Coors +33 per ball in play, Citi
-   Field −8) and speed add smaller pieces. But once the gap is discounted, adding these traits
-   doesn't measurably improve next-season forecasts. [Step 3](docs/step3.md)
-4. **The gap repeats less than the published research says.** Among hitters with 300+ PA
-   in back-to-back seasons, the year-over-year correlation of the wOBA–xwOBA gap was
-   **.38 in 2015–19 and .25 in 2021–26** (difference −.13, 95% CI −.23 to −.02). The
-   method reproduces the published estimate on its original seasons (Melchior's sample
-   rule yields 322 pairs, the same count he reported, and r = .42 vs. his .43), the shift ban isn't the cause,
-   and a fading link between the gap and sprint speed explains about a quarter of the
-   drop. [Step 1](docs/step1.md)
+| | |
+|---|---|
+| **Short answer** | Price hitters on **xwOBA** and ignore the gap. It adds nothing to next-season forecasts. |
+| **Front-office takeaway** | Arozarena's 2026 line overstates him by ~40 points. Seven of eight Mets regulars hit below their contact quality. → [**Read the 1-page memo**](docs/memo.md) |
+| **Data** | 2,774 player-seasons (2021–26) + 2,216 (2015–19), Baseball Savant + MLB Stats API, reconciled to 0 PA mismatches |
+| **Built with** | Python · SQL (DuckDB) · pytest · bootstrapped confidence intervals |
+| **Status** | ✅ Complete (Oct 2026) |
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/step2_trust_dark.png">
   <img alt="Share of the gap to believe rises from about 3% at 25 balls in play to 28% at 400 and 37% at 600 for the current season, and slightly lower for next season." src="docs/figures/step2_trust_light.png" width="720">
 </picture>
 
-## Why this question
+*How much of a hitter's gap to believe, by sample size. Even a full season (~400 balls in play) is only about a quarter signal.*
 
-How much of the gap regresses is usually stated as a rule of thumb rather than measured.
-The published evidence: when the same hitters are tracked across consecutive seasons, the
-gap's year-over-year R² is about .17 (r ≈ .43 in Melchior's 2015–2019 sample), so well under
-half of it carries forward
-([Edwards, FanGraphs 2017](https://blogs.fangraphs.com/how-to-beat-statcasts-hitting-metric);
-[Melchior, RotoGraphs 2019](https://fantasy.fangraphs.com/are-there-chronic-woba-over-and-under-performers)).
+---
 
-Prior work has also identified where the repeatable part comes from:
-- **Sprint speed**, which drove much of the gap
-  ([Chamberlain 2018](https://fantasy.fangraphs.com/how-sprint-speed-relates-to-woba-xwoba))
-  and which xwOBA has partly accounted for since 2019, on topped and weakly hit balls
-  ([MLB glossary](https://www.mlb.com/glossary/statcast/expected-woba)).
-- **Pulled, hard-hit fly balls**, a sticky hitter trait that xwOBA doesn't capture because
-  it doesn't use spray angle
-  ([Clemens, FanGraphs 2023](https://blogs.fangraphs.com/an-meandering-examination-of-fly-ball-pull-rate-featuring-stars-of-the-game-and-also-isaac-paredes/);
-  [Salorio 2024](https://adamsalorio.substack.com/p/introducing-opt_95-identifying-hitters)).
-  In 2019 Tom Tango found xwOBA showed no bias by a hitter's overall pull tendency and left
-  spray angle for future work
-  ([tangotiger.com](https://tangotiger.com/index.php/site/comments/of-spray-angles-fip-and-xwoba-part-2));
-  the later work points to the hard-hit, pulled fly ball specifically.
-- **Park**, which xwOBA removes by design.
+## Key terms (10 seconds)
 
-What this project adds:
-1. **A replication on 2021–2026 data.** The persistence estimates above use 2015–2019 data,
-   mostly from before xwOBA added sprint speed (2019) and all from before the 2023 shift ban.
-2. **Reliability as a function of sample size.** Stabilization work exists for many stats,
-   but I haven't found a published curve for the gap on post-2022 data: how much of a
-   150-batted-ball gap vs. a 450-batted-ball gap should carry forward?
-3. **An out-of-sample test.** Does adjusting for pulled fly balls and park predict *next
-   season's* wOBA better than xwOBA alone?
+- **wOBA:** what a hitter actually produced (hits, walks, home runs, each weighted by its value).
+- **xwOBA:** what he *should* have produced, given how hard and at what angle he hit the ball.
+- **The gap:** wOBA − xwOBA. A .350 wOBA with a .320 xwOBA is a +30 gap.
 
-## Plan
+## Four findings
 
-| Step | Question | Status |
-|---|---|---|
-| 0 | Build a reproducible, validated player-season dataset (2021–2026) | ✅ Done |
-| 1 | How strongly does the gap persist year over year in 2021–2026, and does it match the published r ≈ .43? | ✅ [Done](docs/step1.md) |
-| 2 | How does gap reliability change with sample size? (within-season split-half, shrinkage table) | ✅ [Done](docs/step2.md) |
-| 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | ✅ [Done](docs/step3.md) |
-| 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | ✅ [Done](docs/step4.md) |
-| 5 | Front-office memo: 2026 trade/free-agent targets whose results misstate their underlying quality | ✅ [Memo](docs/memo.md) |
+| # | Finding | The number | Details |
+|---|---|---|---|
+| 1 | **To project next season, use xwOBA and ignore the gap.** | Adding the gap changes forecast error by +0.01 points (95% CI −0.04 to +0.06) | [Step 4](docs/step4.md) |
+| 2 | **Even a full season's gap is mostly luck.** | ~25% carries into next season; half signal only after ~1,000 balls in play (≈2.5 seasons) | [Step 2](docs/step2.md) |
+| 3 | **The part that repeats is mostly pulled power.** | A pulled 100–105 mph fly ball beats xwOBA by **+502** points; the same ball to center/opposite field falls **270** short | [Step 3](docs/step3.md) |
+| 4 | **The gap repeats less than published research says.** | Year-over-year r = **.38** (2015–19) → **.25** (2021–26); published result reproduced first (r = .42 vs. .43) | [Step 1](docs/step1.md) |
 
-## Data
+**The projection rule that comes out of it:** next wOBA ≈ league + .003 + 0.56 × (xwOBA − league), typical miss ±28 points.
 
-All public, downloaded by `src/fetch_data.py` and cached locally in `data/raw/`. The raw
-files are **not committed**: MLB Advanced Media's terms limit this data to personal,
-non-commercial use, so the repo ships the code to rebuild it rather than the data itself.
+## Where to go next
+
+| You have... | Read |
+|---|---|
+| **2 minutes** | [The front-office memo](docs/memo.md): free agents, Mets hitters, buy-low trade targets |
+| **10 minutes** | The step write-ups, each opening with a one-paragraph answer: [1](docs/step1.md) · [2](docs/step2.md) · [3](docs/step3.md) · [4](docs/step4.md) |
+| **An interest in the data engineering** | [How the pipeline works](#how-the-pipeline-works) · [validation report](docs/validation_report.md) · [data notes](docs/data_notes.md) · [data dictionary](docs/data_dictionary.md) |
+| **A laptop** | [Reproduce it](#reproduce-it) |
+
+---
+
+## How the pipeline works
+
+```mermaid
+flowchart LR
+    A["Baseball Savant<br/>leaderboards + Statcast Search"] --> C["data/raw/<br/>cached downloads"]
+    B["MLB Stats API<br/>teams, venues, handedness"] --> C
+    C --> D["DuckDB<br/>staging → player_season → season_pairs"]
+    D --> E{"22 validation checks"}
+    E -- "any FAIL" --> X["build stops"]
+    E -- "all pass" --> F["Steps 1–4<br/>analysis + figures"]
+    F --> G["results/*.csv"]
+    F --> H["Step 5<br/>2027 board + memo"]
+```
+
+**Validation is the backbone.** Every build runs 22 SQL checks ([`sql/02_validation.sql`](sql/02_validation.sql)): uniqueness at every join stage, all seasons present, missing values, plausible ranges, PA reconciliation between Savant and the MLB Stats API, and a cross-check of every player-season's PA, wOBA, and xwOBA against a second Savant endpoint (**2,774 of 2,774 match**; 2,216 of 2,216 for 2015–19).
+
+**One check caught a real bug:** the MLB Stats API's team endpoint leaves out players who changed teams midseason. That undercounted PA for 31 hitters and could have assigned them the wrong home park. Fixed and documented in [`docs/data_notes.md`](docs/data_notes.md).
+
+<details>
+<summary><b>Data sources</b> (click to expand)</summary>
+
+All public. Downloaded by `src/fetch_data.py` and cached in `data/raw/`. The raw files are **not committed**: MLB Advanced Media's terms limit this data to personal, non-commercial use, so the repo ships the code to rebuild it instead.
 
 | Source | Fields | Notes |
 |---|---|---|
@@ -119,36 +77,64 @@ non-commercial use, so the repo ships the code to rebuild it rather than the dat
 | Savant batted-ball leaderboard | Pulled / straightaway / opposite-field air-ball rates | Min 50 batted balls |
 | Savant expected-stats leaderboard | PA, wOBA, xwOBA | Independent endpoint, used only to cross-check |
 | [MLB Stats API](https://statsapi.mlb.com) | PA by team, team and venue IDs, batting hand | Joined on MLBAM player ID |
-| Savant, 2015–2019 | PA, AB, pitches, wOBA, xwOBA, sprint speed | Era comparison and replication of published estimates (step 1) |
+| Savant, 2015–2019 | PA, AB, pitches, wOBA, xwOBA, sprint speed | Era comparison and replication (step 1) |
 | Savant Statcast Search | Every 2021–2026 plate appearance: result, batted-ball type, exit velocity, launch angle, hit coordinates, expected wOBA | Steps 2–3; reconciled to the leaderboards (0 PA mismatches across 2,774 player-seasons) |
 
-**Dataset:** 2,774 player-seasons and 1,780 consecutive-season pairs (2021–2026), plus
-2,216 player-seasons and 1,365 pairs (2015–2019). Column definitions:
-[`docs/data_dictionary.md`](docs/data_dictionary.md).
+**Dataset:** 2,774 player-seasons and 1,780 consecutive-season pairs (2021–2026), plus 2,216 player-seasons and 1,365 pairs (2015–2019). Column definitions: [`docs/data_dictionary.md`](docs/data_dictionary.md).
 
-### Validation
+</details>
 
-Every build runs 22 SQL checks ([`sql/02_validation.sql`](sql/02_validation.sql)):
-uniqueness at every join stage, all six seasons present, missing values in every column, plausible ranges, PA
-reconciliation between Savant and the MLB Stats API, and a cross-check of every
-player-season's PA, wOBA, and xwOBA against a second Savant endpoint (2,774 of 2,774
-match; 2,216 of 2,216 for 2015–2019). Latest results: [`docs/validation_report.md`](docs/validation_report.md).
+<details>
+<summary><b>Why this question, and what's new here</b> (click to expand)</summary>
 
-The PA reconciliation check caught a real bug: the MLB Stats API's team endpoint leaves out
-players who left a team midseason, which undercounted PA for 31 hitters and could assign
-them the wrong home park. Details and other data decisions:
-[`docs/data_notes.md`](docs/data_notes.md).
+How much of the gap regresses is usually stated as a rule of thumb rather than measured. The published evidence: when the same hitters are tracked across consecutive seasons, the gap's year-over-year R² is about .17 (r ≈ .43 in Melchior's 2015–2019 sample), so well under half of it carries forward ([Edwards, FanGraphs 2017](https://blogs.fangraphs.com/how-to-beat-statcasts-hitting-metric); [Melchior, RotoGraphs 2019](https://fantasy.fangraphs.com/are-there-chronic-woba-over-and-under-performers)).
 
-## Reproduce
+Prior work also identified where the repeatable part comes from:
+- **Sprint speed**, which drove much of the gap ([Chamberlain 2018](https://fantasy.fangraphs.com/how-sprint-speed-relates-to-woba-xwoba)) and which xwOBA has partly accounted for since 2019, on topped and weakly hit balls ([MLB glossary](https://www.mlb.com/glossary/statcast/expected-woba)).
+- **Pulled, hard-hit fly balls**, a sticky hitter trait that xwOBA doesn't capture because it doesn't use spray angle ([Clemens, FanGraphs 2023](https://blogs.fangraphs.com/an-meandering-examination-of-fly-ball-pull-rate-featuring-stars-of-the-game-and-also-isaac-paredes/); [Salorio 2024](https://adamsalorio.substack.com/p/introducing-opt_95-identifying-hitters)). In 2019 Tom Tango found xwOBA showed no bias by a hitter's overall pull tendency and left spray angle for future work ([tangotiger.com](https://tangotiger.com/index.php/site/comments/of-spray-angles-fip-and-xwoba-part-2)); later work points to the hard-hit, pulled fly ball specifically.
+- **Park**, which xwOBA removes by design.
+
+What this project adds:
+1. **A replication on 2021–2026 data.** Earlier estimates use 2015–2019 data, mostly from before xwOBA added sprint speed (2019) and all from before the 2023 shift ban.
+2. **Reliability as a function of sample size.** I haven't found a published curve for the gap on post-2022 data: how much of a 150-batted-ball gap vs. a 450-batted-ball gap should carry forward?
+3. **An out-of-sample test.** Does adjusting for pulled fly balls and park predict *next season's* wOBA better than xwOBA alone? (It doesn't.)
+
+| Step | Question | Write-up |
+|---|---|---|
+| 0 | Build a reproducible, validated player-season dataset (2021–2026) | [Validation report](docs/validation_report.md) |
+| 1 | How strongly does the gap persist year over year, and does it match the published r ≈ .43? | [Step 1](docs/step1.md) |
+| 2 | How does gap reliability change with sample size? | [Step 2](docs/step2.md) |
+| 3 | Which hitter traits (pulled-air rate, park, speed, handedness) explain the persistent part? | [Step 3](docs/step3.md) |
+| 4 | Does an adjusted expectation beat plain xwOBA at predicting next-season wOBA? | [Step 4](docs/step4.md) |
+| 5 | Which 2026 hitters' results misstate their underlying quality? | [Memo](docs/memo.md) |
+
+</details>
+
+<details>
+<summary><b>Limitations</b> (click to expand)</summary>
+
+- Projections are **offense only**, use **one season** of history, and have **no age adjustment**. They rank hitters by what 2026 contact quality supports; they aren't full player valuations.
+- 2027's league offensive level is unknown; projections are relative to 2026's.
+- Contract status in the memo comes from public reporting (MLB.com, August 2026), not team records.
+
+</details>
+
+## Reproduce it
 
 ```bash
 pip install -r requirements.txt
-python src/fetch_data.py   # download raw data (~2 min; skips cached files, --force to refresh)
-python src/build_db.py     # build data/statcast.duckdb, run checks (exits non-zero on a FAIL)
-pytest                     # same checks as a test suite
-python src/step1_persistence.py   # step 1 analysis -> results/step1_*.csv
-python src/step1_figures.py       # step 1 charts -> docs/figures/
+python src/fetch_data.py          # download raw data (~2 min; skips cached files, --force to refresh)
+python src/build_db.py            # build data/statcast.duckdb and run the 22 checks (exits non-zero on a FAIL)
+pytest                            # same checks as a test suite
 python src/fetch_statcast.py      # every 2021-26 plate appearance (~35 min, ~24 MB)
+```
+
+<details>
+<summary><b>Run each analysis step</b> (click to expand)</summary>
+
+```bash
+python src/step1_persistence.py   # step 1 -> results/step1_*.csv
+python src/step1_figures.py       # step 1 charts -> docs/figures/
 python src/step2_reliability.py   # step 2 (~20 min, mostly bootstrap) -> results/step2_*.csv
 python src/step3_traits.py        # step 3 -> results/step3_*.csv
 python src/step23_figures.py      # step 2-3 charts
@@ -156,7 +142,10 @@ python src/step4_projection.py    # step 4 -> results/step4_*.csv
 python src/step5_board.py         # step 5: 2027 projections -> results/step5_board.csv
 ```
 
-## Repository layout
+</details>
+
+<details>
+<summary><b>Repository layout</b> (click to expand)</summary>
 
 ```
 src/fetch_data.py         download Savant + MLB Stats API data to data/raw/
@@ -170,16 +159,13 @@ sql/04*_statcast_*.sql    plate-appearance tables valued with each season's exac
 sql/05_step3_traits.sql   spray angle, park effects, forecast-safe park exposure
 tests/                    pytest wrapper around the validation checks
 results/                  step outputs (CSV)
-docs/                     step write-ups, figures, data dictionary, validation report, data notes
+docs/                     memo, step write-ups, figures, data dictionary, validation report, data notes
 ```
+
+</details>
 
 ## About
 
-Built by Jack Eisinger ([LinkedIn](https://www.linkedin.com/in/jack-eisinger)). I played
-baseball through high school and am a lifelong Mets fan. Before this, I spent a year at
-Epic validating clinical data with SQL and translating physicians' questions into testable
-requirements. The reliability framing in step 2 comes from my psychology research
-background (survey design, Cronbach's alpha).
+Built by **Jack Eisinger** ([LinkedIn](https://www.linkedin.com/in/jack-eisinger)). I played baseball through high school and am a lifelong Mets fan. Before this, I spent a year at Epic validating clinical data with SQL and translating physicians' questions into testable requirements. The reliability framing in step 2 comes from my psychology research background (survey design, Cronbach's alpha).
 
-Code was written with [Claude Code](https://claude.com/claude-code) under my direction. I
-chose the question, reviewed every data decision, and can walk through any line.
+Code was written with [Claude Code](https://claude.com/claude-code) under my direction. I chose the question, reviewed every data decision, and can walk through any line.

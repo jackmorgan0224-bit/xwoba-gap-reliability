@@ -8,3 +8,6 @@ __pycache__/
 
 # MLB Advanced Media data: personal, non-commercial use only. Rebuild with src/fetch_data.py.
 data/raw/
+
+# Test cache
+.pytest_cache/
