@@ -6,7 +6,7 @@ I answered it with every MLB plate appearance from 2021–2026, a validated SQL 
 | | |
 |---|---|
 | **Short answer** | Price hitters on **xwOBA** and ignore the gap. It adds nothing to next-season forecasts, even with three seasons of history. |
-| **Front-office takeaway** | Arozarena's 2026 line overstates him by ~50 points. Seven of eight Mets regulars project above their 2026 numbers. → [**Read the 1-page memo**](docs/memo.md) |
+| **Front-office takeaway** | Arozarena's 2026 line overstates him by ~50 points. Seven of eight Mets regulars project above their 2026 numbers. → [**Read the 2-minute memo**](docs/memo.md) |
 | **Data** | 2,774 player-seasons (2021–26) + 2,216 (2015–19), Baseball Savant + MLB Stats API, reconciled to 0 PA mismatches |
 | **Built with** | Python · SQL (DuckDB) · pytest · bootstrapped confidence intervals |
 | **Status** | ✅ Complete (Oct 2026) |
@@ -169,6 +169,6 @@ docs/                     memo, step write-ups, figures, data dictionary, valida
 
 ## About
 
-Built by **Jack Eisinger** ([LinkedIn](https://www.linkedin.com/in/jack-eisinger)). I played baseball through high school and am a lifelong Mets fan. Before this, I spent a year at Epic validating clinical data with SQL and translating physicians' questions into testable requirements. The reliability framing in step 2 comes from my psychology research background (survey design, Cronbach's alpha).
+Built by **Jack Eisinger** ([LinkedIn](https://www.linkedin.com/in/jack-eisinger-a7a67421a)). I played baseball through high school and am a lifelong Mets fan. Before this, I spent a year at Epic validating clinical data with SQL and translating physicians' questions into testable requirements. The reliability framing in step 2 comes from my psychology research background (survey design, Cronbach's alpha).
 
 Code was written with [Claude Code](https://claude.com/claude-code) under my direction. I chose the question, reviewed every data decision, and can walk through any line.
